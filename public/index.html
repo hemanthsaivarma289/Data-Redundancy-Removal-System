@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DataClean | Redundancy Removal</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand"><span class="brand-icon">D</span><div><strong>DataClean</strong><small>DATA QUALITY TOOL</small></div></div>
+    <div class="nav-label">WORKSPACE</div>
+    <a class="nav-item active" href="#overview">▦ <span>Overview</span></a>
+    <a class="nav-item" href="#records">▤ <span>All records</span></a>
+    <a class="nav-item" href="#duplicates">⧉ <span>Duplicates</span></a>
+    <div class="sidebar-bottom"><div class="status-dot"></div><div><strong>Database status</strong><small id="db-status">Connecting...</small></div></div>
+  </aside>
+
+  <main class="main-content">
+    <header class="topbar"><div><p class="eyebrow">DATA MANAGEMENT / WORKSPACE</p><h1>Data Redundancy Removal</h1><p class="subtitle">Find repeated records, review them, and clean your database.</p></div><button class="button primary" id="top-add">＋ Add record</button></header>
+
+    <section id="overview">
+      <div class="stats-grid">
+        <article class="stat-card"><div class="stat-top"><span>Total records</span><span class="stat-icon blue">▤</span></div><div class="stat-number" id="total-count">—</div><p>Records stored in database</p></article>
+        <article class="stat-card"><div class="stat-top"><span>Duplicate groups</span><span class="stat-icon orange">⧉</span></div><div class="stat-number" id="group-count">—</div><p>Groups with repeated information</p></article>
+        <article class="stat-card"><div class="stat-top"><span>Extra duplicates</span><span class="stat-icon red">↘</span></div><div class="stat-number" id="duplicate-count">—</div><p>Records that can be removed</p></article>
+        <article class="stat-card"><div class="stat-top"><span>After cleanup</span><span class="stat-icon green">✓</span></div><div class="stat-number" id="unique-count">—</div><p>Records remaining if cleaned</p></article>
+      </div>
+    </section>
+
+    <section class="panel import-panel">
+      <div class="panel-heading"><div><h2>Import CSV file</h2><p>Upload a CSV spreadsheet to add many records at once.</p></div><a class="text-link" href="/api/sample.csv">Download sample CSV ↗</a></div>
+      <form id="import-form" class="import-row"><label class="file-picker"> <span>⇧</span><span id="file-name">Choose a .csv file</span><input id="csv-file" type="file" name="file" accept=".csv,text/csv" required /></label><button class="button primary" type="submit">Import records</button></form>
+      <p class="hint">Required column: <code>name</code>. Optional columns: <code>email</code>, <code>phone</code>, <code>department</code>. Maximum file size: 5 MB.</p>
+    </section>
+
+    <section class="panel" id="records">
+      <div class="panel-heading"><div><h2>All records</h2><p>Search and manage the records stored in MongoDB.</p></div><button class="button secondary" id="refresh-button">↻ Refresh</button></div>
+      <div class="toolbar"><label class="search-box"><span>⌕</span><input id="search-input" type="search" placeholder="Search name, email, phone or department..." /></label><span class="record-total" id="record-total">0 records</span></div>
+      <div class="table-wrap"><table><thead><tr><th>NAME</th><th>EMAIL</th><th>PHONE</th><th>DEPARTMENT</th><th>DATE ADDED</th><th></th></tr></thead><tbody id="records-body"><tr><td colspan="6" class="empty">Loading records...</td></tr></tbody></table></div>
+    </section>
+
+    <section class="panel duplicates-panel" id="duplicates">
+      <div class="panel-heading"><div><h2>Duplicate review</h2><p>Records are matched by email. If email is missing, name + phone are used.</p></div><button class="button danger" id="clean-button">Clean duplicates</button></div>
+      <div id="duplicate-content"><div class="empty">Checking for duplicates...</div></div>
+      <p class="hint">Safety: cleanup keeps the oldest record in each duplicate group and deletes the extra copies only after confirmation.</p>
+    </section>
+    <footer>DataClean · CodeAlpha Task 1 · Data Redundancy Removal System</footer>
+  </main>
+
+  <dialog id="record-dialog" class="record-dialog">
+    <form id="record-form" method="dialog">
+      <div class="dialog-head"><div><h2>Add new record</h2><p>Enter the information below.</p></div><button type="button" class="close-button" id="close-dialog" aria-label="Close">×</button></div>
+      <label>Full name *<input name="name" required maxlength="120" placeholder="e.g. Asha Rao" /></label>
+      <label>Email address<input name="email" type="email" placeholder="e.g. asha@example.com" /></label>
+      <label>Phone number<input name="phone" placeholder="e.g. 9876543210" /></label>
+      <label>Department<input name="department" placeholder="e.g. Information Technology" /></label>
+      <div class="dialog-actions"><button type="button" class="button secondary" id="cancel-dialog">Cancel</button><button class="button primary" type="submit">Save record</button></div>
+    </form>
+  </dialog>
+  <div id="toast" class="toast" role="status"></div>
+  <script src="/app.js"></script>
+</body>
+</html>
